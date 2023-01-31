@@ -1,0 +1,218 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Ubuntu';
+  padding: 6rem;
+  min-height: 100vh;
+}
+
+.containerAligment {
+  position: absolute;
+  margin: 0 auto;
+  width: 350px;
+}
+
+.container {
+  position: absolute;
+  background: #ffffff;
+  border-radius: 5px;
+  width: 100%;
+  height: 100%;
+}
+
+.label {
+  position: absolute;
+  left: 16px;
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  color: #5022ed;
+}
+
+/* Exchange */
+
+.containerExchangeAligment {
+  top: 178px;
+  height: 221px;
+}
+
+.labelTop {
+  top: 25px;
+}
+
+.labelBottom {
+  top: 115px;
+}
+
+.inputSelectBox {
+  position: absolute;
+  box-sizing: border-box;
+  height: 48px;
+  width: 160px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+}
+
+.inputTop {
+  top: 55px;
+  left: 16px;
+}
+
+.selectTop {
+  top: 55px;
+  left: 175px;
+}
+
+.inputBottom {
+  top: 145px;
+  left: 16px;
+}
+
+.selectBottom {
+  top: 145px;
+  left: 175px;
+}
+
+.menuItem {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #9c82ef;
+}
+
+.menuItemText {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 15px;
+  color: #5022ed;
+  background-color: #c1b4eb90;
+  padding: 3px;
+  border-radius: 6px;
+  margin-bottom: 3px;
+}
+
+.icon {
+  margin: 5px 8px 0 0;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 17px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.cryptoLabel {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  display: flex;
+  color: #597ef7;
+}
+
+.minAmount {
+  position: absolute;
+  top: 196px;
+  left: 18px;
+  font-size: 11px;
+  color: red;
+}
+
+/* Payment Method */
+
+.containerPaymentMethodAlignment {
+  top: 432px;
+  height: 138px;
+}
+
+.labelPaymentMethod {
+  top: 19px;
+}
+
+.inputPaymentMehod {
+  top: 49px;
+  left: 16px;
+  width: 316px;
+}
+
+.menuItemPaymentMethod {
+  font-family: 'PingFang SC';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 46px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+/* Payment Method */
+
+.containerPayConfirmationAligment {
+  top: 622px;
+  height: 135px;
+  border: 1px solid #d9d9d9;
+  border-radius: 5px 5px 0px 0px;
+  box-shadow: 0px -4px 12px 3px rgb(0 0 0 / 0.2);
+}
+
+.orderInfo {
+  width: 181px;
+  height: 36px;
+  left: 97px;
+  top: -19px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  box-shadow: 0px -4px 12px 3px rgb(0 0 0 / 0.2);
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 22px;
+}
+
+.button {
+  position: absolute;
+  top: 67px;
+  left: 20px;
+  width: 316px;
+  height: 48px;
+  color: #ffffff;
+  background-color: #16dfb5;
+}
+
+.button:hover {
+  background-color: #031b16;
+}
+
+.totalAmount {
+  position: absolute;
+  left: 20px;
+  top: 29px;
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 25px;
+}
+
+.price {
+  position: absolute;
+  right: 14px;
+  top: 29px;
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 25px;
+  color: rgba(0, 0, 0, 0.65);
+}

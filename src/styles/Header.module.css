@@ -1,0 +1,15 @@
+.headerBox {
+  position: absolute;
+  width: 100%;
+  top: 44px;
+  height: 64px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 1px solid #D9D9D9;
+}
+
+.logo {
+  position: absolute;
+  left: 35px;
+  top: 21px;
+}

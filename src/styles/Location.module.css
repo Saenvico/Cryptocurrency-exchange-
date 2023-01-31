@@ -1,0 +1,23 @@
+.location {
+  position: absolute;
+  left: 12px;
+  top: 124px;
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 21px;
+  color: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+}
+
+.homeIcon{
+    width: 17px;
+    height: 17px;
+}
+
+.highlighted{
+    color: rgba(0, 0, 0, 0.65);
+    margin-left: .5rem
+}
