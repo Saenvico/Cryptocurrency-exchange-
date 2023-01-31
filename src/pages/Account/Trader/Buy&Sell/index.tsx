@@ -8,9 +8,6 @@ import {
   SelectChangeEvent,
   Button,
 } from '@mui/material';
-import EuroIcon from '@mui/icons-material/Euro';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import CurrencyPoundIcon from '@mui/icons-material/CurrencyPound';
 import Image from 'next/image';
 import styles from '@/styles/BuyAndSell.module.css';
 import Header from '@/components/Header';
@@ -63,14 +60,17 @@ const CURRENCIES = [
   {
     title: 'EUR',
     value: Currencies.EUR,
+    icon: '€',
   },
   {
     title: 'USD',
     value: Currencies.USD,
+    icon: '$',
   },
   {
     title: 'GBP',
     value: Currencies.GBP,
+    icon: '£',
   },
 ];
 
@@ -209,7 +209,7 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
                     className={styles.menuItem}
                     value={item.value}
                   >
-                    <EuroIcon className={styles.icon} />
+                    <span className={styles.icon}>{item.icon}</span>
                     <span className={styles.menuItemText}>{item.title}</span>
                   </MenuItem>
                 ))}
@@ -299,11 +299,11 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
                 <div className={styles.price}>
                   {currencyInputValue}
                   {currency === 'EUR' ? (
-                    <EuroIcon className={styles.icon} />
+                    <span className={styles.icon}>€</span>
                   ) : currency === 'USD' ? (
-                    <AttachMoneyIcon className={styles.icon} />
+                    <span className={styles.icon}>$</span>
                   ) : (
-                    <CurrencyPoundIcon className={styles.icon} />
+                    <span className={styles.icon}>£</span>
                   )}
                 </div>
               </div>
