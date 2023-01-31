@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import styles from './../styles/Location.module.css';
+import styles from './Location.module.css';
 
 export default function Location() {
   const router = useRouter();

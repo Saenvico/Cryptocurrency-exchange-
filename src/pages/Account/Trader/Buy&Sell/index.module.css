@@ -195,12 +195,17 @@
   line-height: 22px;
 }
 
-.button {
+.buttonContainer{
   position: absolute;
   top: 67px;
   left: 20px;
   width: 316px;
   height: 48px;
+}
+
+.button {
+  width: 100%;
+  height: 100%;
   color: #ffffff;
   background-color: #16dfb5;
 }

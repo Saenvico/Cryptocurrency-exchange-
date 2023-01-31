@@ -8,10 +8,17 @@ import {
   SelectChangeEvent,
   Button,
 } from '@mui/material';
+
 import Image from 'next/image';
-import styles from '@/styles/BuyAndSell.module.css';
+import styles from './index.module.css';
 import Header from '@/components/Header';
 import Location from '@/components/Location';
+import {
+  Currencies,
+  Cryptos,
+  PaymentMethod,
+  ExchangeRates
+} from './../../../../models/exchange';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`https://api.coingate.com/v2/rates/`);
@@ -23,37 +30,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     },
   };
 };
-
-enum Currencies {
-  USD = 'USD',
-  EUR = 'EUR',
-  GBP = 'GBP',
-}
-
-enum Cryptos {
-  BTC = 'BTC',
-  LTC = 'LTC',
-  ETH = 'ETH',
-}
-
 interface ExchangeProps {
-  exchangeRates: {
-    BTC: {
-      USD: string;
-      EUR: string;
-      GBP: string;
-    };
-    LTC: {
-      USD: string;
-      EUR: string;
-      GBP: string;
-    };
-    ETH: {
-      USD: string;
-      EUR: string;
-      GBP: string;
-    };
-  };
+  exchangeRates: ExchangeRates;
 }
 
 const CURRENCIES = [
@@ -113,6 +91,8 @@ const PAYMENTMETHODS = [
   },
 ];
 
+const MINIMUM_EXHANGE_AMMOUNT = 0.000048;
+
 export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
   const [currency, setCurrency] = useState<Currencies>(Currencies.EUR);
   const [crypto, setCrypto] = useState<Cryptos>(Cryptos.BTC);
@@ -157,7 +137,7 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
     ).toFixed(10) as any;
     const receiveAmount: number = parseFloat(receiveAmountToFixed);
 
-    if (receiveAmount < 0.000048) {
+    if (receiveAmount < MINIMUM_EXHANGE_AMMOUNT) {
       setShowMinAmount(true);
     } else {
       setShowMinAmount(false);
@@ -258,7 +238,9 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
             </Grid>
           </Container>
           {showMinAmount && (
-            <span className={styles.minAmount}>Min amount is 0.000048 BTC</span>
+            <span className={styles.minAmount}>
+              Min amount is {MINIMUM_EXHANGE_AMMOUNT} BTC
+            </span>
           )}
         </div>
         <div
@@ -268,30 +250,32 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
             <label className={`${styles.label} ${styles.labelPaymentMethod}`}>
               Payment method
             </label>
-            <Select
-              className={`${styles.inputPaymentMehod} ${styles.inputSelectBox}`}
-              labelId="select-label"
-              id="select"
-              value={payment}
-              label="Currency"
-              onChange={handlePaymentChange}
-            >
-              {PAYMENTMETHODS.map((item) => (
-                <MenuItem key={item.value} value={item.value}>
-                  <span className={styles.spanMenuItemPayment}>
-                    {item.title}
-                  </span>
-                </MenuItem>
-              ))}
-            </Select>
+            <div className={styles.inputSelectBoxContainer}>
+              <Select
+                className={`${styles.inputPaymentMehod} ${styles.inputSelectBox}`}
+                labelId="select-label"
+                id="select"
+                value={payment}
+                label="Currency"
+                onChange={handlePaymentChange}
+              >
+                {PAYMENTMETHODS.map((item) => (
+                  <MenuItem key={item.value} value={item.value}>
+                    <span className={styles.spanMenuItemPayment}>
+                      {item.title}
+                    </span>
+                  </MenuItem>
+                ))}
+              </Select>
+            </div>
           </Container>
         </div>
         <div
           className={`${styles.containerAligment} ${styles.containerPayConfirmationAligment}`}
         >
-          <Container className={`${styles.container} ${styles.orderInfo}`}>
+          <div className={`${styles.container} ${styles.orderInfo}`}>
             <span>Order information</span>
-          </Container>
+          </div>
           <Container className={styles.container}>
             <Grid>
               <span className={styles.totalAmount}>Total amount to Pay</span>
@@ -308,9 +292,15 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
                 </div>
               </div>
             </Grid>
-            <Button onClick={() => handleSubmit()} className={styles.button}>
-              Buy {crypto}
-            </Button>
+            <div className={styles.buttonContainer}>
+              <Button
+                variant="contained"
+                onClick={() => handleSubmit()}
+                className={styles.button}
+              >
+                Buy {crypto}
+              </Button>
+            </div>
           </Container>
         </div>
       </main>

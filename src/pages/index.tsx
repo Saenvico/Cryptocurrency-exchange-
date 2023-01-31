@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styles from '@/styles/Home.module.css';
+import styles from './index.module.css';
 import Button from '@mui/material/Button';
 
 export default function Home() {
