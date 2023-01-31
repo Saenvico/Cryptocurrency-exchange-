@@ -128,25 +128,27 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
                 placeholder="Currency amount"
                 required
               ></input>
-              <Select
-                className={`${styles.selectTop} ${styles.inputSelectBox}`}
-                labelId="select-label"
-                id="select"
-                value={currency}
-                label="Currency"
-                onChange={handleCurrencyChange}
-              >
-                {CURRENCIES.map((item) => (
-                  <MenuItem
-                    key={item.title}
-                    className={styles.menuItem}
-                    value={item.value}
-                  >
-                    <span className={styles.icon}>{item.icon}</span>
-                    <span className={styles.menuItemText}>{item.title}</span>
-                  </MenuItem>
-                ))}
-              </Select>
+              <div className={styles.selectCurrencyContainer}>
+                <Select
+                  className={styles.inputSelectBox}
+                  labelId="select-label"
+                  id="select"
+                  value={currency}
+                  label="Currency"
+                  onChange={handleCurrencyChange}
+                >
+                  {CURRENCIES.map((item) => (
+                    <MenuItem
+                      key={item.title}
+                      className={styles.menuItem}
+                      value={item.value}
+                    >
+                      <span className={styles.icon}>{item.icon}</span>
+                      <span className={styles.menuItemText}>{item.title}</span>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
             </Grid>
             <label className={`${styles.label} ${styles.labelBottom}`}>
               Receive amount
@@ -157,37 +159,39 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
               >
                 {cryptoValue}
               </div>
-              <Select
-                className={`${styles.selectBottom} ${styles.inputSelectBox}`}
-                labelId="select-label"
-                id="select"
-                value={crypto}
-                label="Currency"
-                onChange={handleCryptoChange}
-              >
-                {CRYPTOS.map((item) => (
-                  <MenuItem
-                    key={item.title}
-                    className={styles.menuItem}
-                    value={item.value}
-                  >
-                    <Grid>
-                      <Image
-                        src={item.src}
-                        alt={item.alt}
-                        className={styles.icon}
-                        width={20}
-                        height={20}
-                        priority
-                      />
-                      <span className={styles.cryptoShortName}>
-                        {item.title}
-                      </span>
-                    </Grid>
-                    <label className={styles.cryptoLabel}>{item.label}</label>
-                  </MenuItem>
-                ))}
-              </Select>
+              <div className={styles.selectCryptoContainer}>
+                <Select
+                  className={styles.inputSelectBox}
+                  labelId="select-label"
+                  id="select"
+                  value={crypto}
+                  label="Currency"
+                  onChange={handleCryptoChange}
+                >
+                  {CRYPTOS.map((item) => (
+                    <MenuItem
+                      key={item.title}
+                      className={styles.menuItem}
+                      value={item.value}
+                    >
+                      <Grid>
+                        <Image
+                          src={item.src}
+                          alt={item.alt}
+                          className={styles.icon}
+                          width={20}
+                          height={20}
+                          priority
+                        />
+                        <span className={styles.cryptoShortName}>
+                          {item.title}
+                        </span>
+                      </Grid>
+                      <label className={styles.cryptoLabel}>{item.label}</label>
+                    </MenuItem>
+                  ))}
+                </Select>
+              </div>
             </Grid>
           </Container>
           {showMinAmount && (
@@ -203,13 +207,13 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
             <label className={`${styles.label} ${styles.labelPaymentMethod}`}>
               Payment method
             </label>
-            <div className={styles.inputSelectBoxContainer}>
+            <div className={styles.selectPaymentContainer}>
               <Select
                 className={`${styles.inputPaymentMehod} ${styles.inputSelectBox}`}
                 labelId="select-label"
                 id="select"
                 value={payment}
-                label="Currency"
+                label="Payment method"
                 onChange={handlePaymentChange}
               >
                 {PAYMENTMETHODS.map((item) => (

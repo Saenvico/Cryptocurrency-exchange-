@@ -48,6 +48,18 @@
   top: 115px;
 }
 
+.selectCryptoContainer {
+  position: absolute;
+  top: 145px;
+  left: 175px;
+}
+
+.selectCurrencyContainer {
+  position: absolute;
+  top: 55px;
+  left: 175px;
+}
+
 .inputSelectBox {
   position: absolute;
   box-sizing: border-box;
@@ -62,21 +74,11 @@
   left: 16px;
 }
 
-.selectTop {
-  top: 55px;
-  left: 175px;
-}
-
 .textBoxBottom {
   display: flex;
   align-items: center;
   top: 145px;
   left: 16px;
-}
-
-.selectBottom {
-  top: 145px;
-  left: 175px;
 }
 
 .menuItem {
@@ -148,14 +150,18 @@
   top: 432px;
   height: 138px;
 }
+.selectPaymentContainer {
+  position: absolute;
+  top: 49px;
+  left: 16px;
+  width: 316px;
+}
 
 .labelPaymentMethod {
   top: 19px;
 }
 
 .inputPaymentMehod {
-  top: 49px;
-  left: 16px;
   width: 316px;
 }
 
@@ -195,7 +201,7 @@
   line-height: 22px;
 }
 
-.buttonContainer{
+.buttonContainer {
   position: absolute;
   top: 67px;
   left: 20px;
