@@ -16,7 +16,11 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Button className={styles.buttonMain} href="/Account/Trader/Buy&Sell">
+        <Button
+          className={styles.buttonMain}
+          variant="contained"
+          href="/Account/Trader/Buy&Sell"
+        >
           Press to jump to Buy & Sell page
         </Button>
       </main>

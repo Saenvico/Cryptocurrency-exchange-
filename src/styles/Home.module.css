@@ -12,3 +12,7 @@
   color: black;
   background-color: rgb(255, 255, 255);
 }
+
+.buttonMain:hover {
+  background-color: rgb(203, 201, 201)
+}
