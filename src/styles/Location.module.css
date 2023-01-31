@@ -12,12 +12,12 @@
   align-items: center;
 }
 
-.homeIcon{
-    width: 17px;
-    height: 17px;
+.homeIcon {
+  width: 17px;
+  height: 17px;
 }
 
-.highlighted{
-    color: rgba(0, 0, 0, 0.65);
-    margin-left: .5rem
+.highlighted {
+  color: rgba(0, 0, 0, 0.65);
+  margin-left: 0.5rem;
 }

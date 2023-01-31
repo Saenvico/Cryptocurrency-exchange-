@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import {
   Container,
   Grid,
-  Input,
   Select,
   MenuItem,
   SelectChangeEvent,
@@ -16,9 +16,7 @@ import styles from '@/styles/BuyAndSell.module.css';
 import Header from '@/components/Header';
 import Location from '@/components/Location';
 
-import { GetStaticProps } from 'next';
-
-export const getStaticProps: GetStaticProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await fetch(`https://api.coingate.com/v2/rates/`);
   const data = await res.json();
   return {
@@ -26,14 +24,22 @@ export const getStaticProps: GetStaticProps = async (context) => {
       data,
       exchangeRates: data.merchant || null,
     },
-    // revalidate: 3600,
   };
 };
-interface IObjectKeys {
-  [key: string]: string;
+
+enum Currencies {
+  USD = 'USD',
+  EUR = 'EUR',
+  GBP = 'GBP',
 }
 
-interface IndexPageProps {
+enum Cryptos {
+  BTC = 'BTC',
+  LTC = 'LTC',
+  ETH = 'ETH',
+}
+
+interface ExchangeProps {
   exchangeRates: {
     BTC: {
       USD: string;
@@ -53,63 +59,69 @@ interface IndexPageProps {
   };
 }
 
-export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
-  console.log(exchangeRates.BTC.USD, 'data22');
-  const [currency, setCurrency] = useState('EUR');
-  const [crypto, setCrypto] = useState('BTC');
+export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
+  const [currency, setCurrency] = useState<Currencies>(Currencies.EUR);
+  const [crypto, setCrypto] = useState<Cryptos>(Cryptos.BTC);
   const [payment, setPayment] = useState('bank');
-  const [currencyInputValue, setCurrencyInputValue] = useState<Number>();
-  const [cryptoValue, setCryptoValue] = useState<Number>();
-
-  // const currencyTextInputRef = useRef<HTMLInputElement>(null);
-
-  let minAmount: boolean = false;
+  const [currencyInputValue, setCurrencyInputValue] = useState<number>();
+  const [cryptoValue, setCryptoValue] = useState<number>();
+  const [showMinAmount, setShowMinAmount] = useState<boolean>(false);
 
   const handleCurrencyChange = (event: SelectChangeEvent) => {
-    setCurrency(event.target.value as string);
+    setCurrency(event.target.value as Currencies);
   };
 
   const handleCryptoChange = (event: SelectChangeEvent) => {
-    setCrypto(event.target.value as string);
+    setCrypto(event.target.value as Cryptos);
   };
 
   const handlePaymentChange = (event: SelectChangeEvent) => {
     setPayment(event.target.value as string);
   };
 
-  let receiveAmount = 0;
-  let enteredCurrency = 0;
-
   const countingHandler = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     const target = e.target as HTMLInputElement;
     let currencyValue = Number.parseInt(target.value);
 
-    setCurrencyInputValue(currencyValue);
-
-    if (!currencyInputValue || currencyInputValue === 0) {
-      console.log('check up');
+    if (!currencyValue || currencyValue === 0) {
+      setCryptoValue(0);
+      setCurrencyInputValue(0);
       return;
     }
 
-    const getCryptoValue = exchangeRates[crypto];
-    const getCurrencyValue = parseInt(getCryptoValue[currency]);
+    setCurrencyInputValue(currencyValue);
+  };
 
-    const receiveAmount: number = currencyInputValue / getCurrencyValue;
-    setCryptoValue(receiveAmount);
-
-    console.log(enteredCurrency, 'test');
-
-    if (receiveAmount > 0.000048) {
-      minAmount = true;
+  useEffect(() => {
+    if (!currencyInputValue || currencyInputValue === 0) {
+      return;
     }
 
-    // const enteredCurrency = parseFloat(currencyTextInputRef.current!.value);
-    console.log(currency, 'currency');
+    const getCurrencyValue = parseFloat(exchangeRates[crypto][currency]);
 
-    // console.log(enteredCurrency, 'test');
+    let receiveAmountToFixed = (currencyInputValue / getCurrencyValue).toFixed(
+      10
+    ) as any;
 
-    return enteredCurrency;
+    let receiveAmount: number = parseFloat(receiveAmountToFixed);
+
+    if (receiveAmount < 0.000048) {
+      setShowMinAmount(true);
+    } else {
+      setShowMinAmount(false);
+    }
+
+    setCryptoValue(receiveAmount);
+  }, [exchangeRates, currency, crypto, currencyInputValue]);
+
+  const handleSubmit = () => {
+    if (currencyInputValue) {
+      console.log(currencyInputValue, currency, cryptoValue, crypto, payment);
+      alert(`Success! You bought ${cryptoValue} ${crypto}`);
+    } else {
+      alert(`Please enter valid amount in pay amount field`);
+    }
   };
 
   return (
@@ -127,7 +139,6 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
             <Grid>
               <input
                 type="number"
-                value={currencyInputValue}
                 className={`${styles.inputTop} ${styles.inputSelectBox}`}
                 onChange={countingHandler}
                 placeholder="Currency amount"
@@ -141,15 +152,15 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
                 label="Currency"
                 onChange={handleCurrencyChange}
               >
-                <MenuItem className={styles.menuItem} value={'EUR'}>
+                <MenuItem className={styles.menuItem} value={Currencies.EUR}>
                   <EuroIcon className={styles.icon} />
                   <span className={styles.menuItemText}>EUR</span>
                 </MenuItem>
-                <MenuItem className={styles.menuItem} value={'USD'}>
+                <MenuItem className={styles.menuItem} value={Currencies.USD}>
                   <AttachMoneyIcon className={styles.icon} />
                   <span className={styles.menuItemText}>USD</span>
                 </MenuItem>
-                <MenuItem className={styles.menuItem} value={'GBP'}>
+                <MenuItem className={styles.menuItem} value={Currencies.GBP}>
                   <CurrencyPoundIcon className={styles.icon} />
                   <span className={styles.menuItemText}>GBP</span>
                 </MenuItem>
@@ -160,7 +171,9 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
               Receive amount
             </label>
             <Grid>
-              <div className={`${styles.inputBottom} ${styles.inputSelectBox}`}>
+              <div
+                className={`${styles.textBoxBottom} ${styles.inputSelectBox}`}
+              >
                 {cryptoValue}
               </div>
               <Select
@@ -171,7 +184,7 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
                 label="Currency"
                 onChange={handleCryptoChange}
               >
-                <MenuItem className={styles.menuItem} value={'BTC'}>
+                <MenuItem className={styles.menuItem} value={Cryptos.BTC}>
                   <Grid>
                     <Image
                       src="/btc.webp"
@@ -181,11 +194,11 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
                       height={20}
                       priority
                     />
-                    BTC
+                    <span className={styles.cryptoShortName}>BTC</span>
                   </Grid>
                   <label className={styles.cryptoLabel}>BITCOIN</label>
                 </MenuItem>
-                <MenuItem className={styles.icon} value={'LTC'}>
+                <MenuItem className={styles.icon} value={Cryptos.LTC}>
                   <Grid>
                     <Image
                       src="/ltc.png"
@@ -195,11 +208,11 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
                       height={20}
                       priority
                     />
-                    LTC
+                    <span className={styles.cryptoShortName}>LTC</span>
                   </Grid>
                   <label className={styles.cryptoLabel}>LITECOIN</label>
                 </MenuItem>
-                <MenuItem className={styles.icon} value={'ETH'}>
+                <MenuItem className={styles.icon} value={Cryptos.ETH}>
                   <Grid>
                     <Image
                       src="/eth.png"
@@ -209,14 +222,14 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
                       height={20}
                       priority
                     />
-                    ETH
+                    <span className={styles.cryptoShortName}>ETH</span>
                   </Grid>
                   <label className={styles.cryptoLabel}>ETHEREUM</label>
                 </MenuItem>
               </Select>
             </Grid>
           </Container>
-          {minAmount && (
+          {showMinAmount && (
             <span className={styles.minAmount}>Min amount is 0.000048 BTC</span>
           )}
         </div>
@@ -235,20 +248,22 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
               label="Currency"
               onChange={handlePaymentChange}
             >
-              <MenuItem className={styles.menuItemPaymentMethod} value={'bank'}>
-                Easy bank transfer
+              <MenuItem value={'bank'}>
+                <span className={styles.spanMenuItemPayment}>
+                  Easy bank transfer
+                </span>
               </MenuItem>
               <MenuItem
                 className={styles.menuItemPaymentMethod}
                 value={'credit'}
               >
-                Credit card
+                <span className={styles.spanMenuItemPayment}>Credit card</span>
               </MenuItem>
               <MenuItem
                 className={styles.menuItemPaymentMethod}
                 value={'debit'}
               >
-                Debit card
+                <span className={styles.spanMenuItemPayment}>Debit card</span>
               </MenuItem>
             </Select>
           </Container>
@@ -276,7 +291,9 @@ export default function BuyAndSell({ exchangeRates }: IndexPageProps) {
                 </div>
               </div>
             </Grid>
-            <Button className={styles.button}>Buy</Button>
+            <Button onClick={() => handleSubmit()} className={styles.button}>
+              Buy {crypto}
+            </Button>
           </Container>
         </div>
       </main>
