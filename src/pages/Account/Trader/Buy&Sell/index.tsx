@@ -59,6 +59,60 @@ interface ExchangeProps {
   };
 }
 
+const CURRENCIES = [
+  {
+    title: 'EUR',
+    value: Currencies.EUR,
+  },
+  {
+    title: 'USD',
+    value: Currencies.USD,
+  },
+  {
+    title: 'GBP',
+    value: Currencies.GBP,
+  },
+];
+
+const CRYPTOS = [
+  {
+    title: 'BTC',
+    value: Cryptos.BTC,
+    label: 'BITCOIN',
+    src: '/btc.webp',
+    alt: 'Bitcoin Logo',
+  },
+  {
+    title: 'LTC',
+    value: Cryptos.LTC,
+    label: 'LITECOIN',
+    src: '/ltc.png',
+    alt: 'Litecoin Logo',
+  },
+  {
+    title: 'ETH',
+    value: Cryptos.ETH,
+    label: 'ETHEREUM',
+    src: '/eth.png',
+    alt: 'Ethereum Logo',
+  },
+];
+
+const PAYMENTMETHODS = [
+  {
+    value: 'bank',
+    title: 'Easy bank transfer',
+  },
+  {
+    value: 'credit',
+    title: 'Credit card',
+  },
+  {
+    value: 'debit',
+    title: 'Debit card',
+  },
+];
+
 export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
   const [currency, setCurrency] = useState<Currencies>(Currencies.EUR);
   const [crypto, setCrypto] = useState<Cryptos>(Cryptos.BTC);
@@ -97,14 +151,11 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
     if (!currencyInputValue || currencyInputValue === 0) {
       return;
     }
-
     const getCurrencyValue = parseFloat(exchangeRates[crypto][currency]);
-
-    let receiveAmountToFixed = (currencyInputValue / getCurrencyValue).toFixed(
-      10
-    ) as any;
-
-    let receiveAmount: number = parseFloat(receiveAmountToFixed);
+    const receiveAmountToFixed = (
+      currencyInputValue / getCurrencyValue
+    ).toFixed(10) as any;
+    const receiveAmount: number = parseFloat(receiveAmountToFixed);
 
     if (receiveAmount < 0.000048) {
       setShowMinAmount(true);
@@ -152,21 +203,18 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
                 label="Currency"
                 onChange={handleCurrencyChange}
               >
-                <MenuItem className={styles.menuItem} value={Currencies.EUR}>
-                  <EuroIcon className={styles.icon} />
-                  <span className={styles.menuItemText}>EUR</span>
-                </MenuItem>
-                <MenuItem className={styles.menuItem} value={Currencies.USD}>
-                  <AttachMoneyIcon className={styles.icon} />
-                  <span className={styles.menuItemText}>USD</span>
-                </MenuItem>
-                <MenuItem className={styles.menuItem} value={Currencies.GBP}>
-                  <CurrencyPoundIcon className={styles.icon} />
-                  <span className={styles.menuItemText}>GBP</span>
-                </MenuItem>
+                {CURRENCIES.map((item) => (
+                  <MenuItem
+                    key={item.title}
+                    className={styles.menuItem}
+                    value={item.value}
+                  >
+                    <EuroIcon className={styles.icon} />
+                    <span className={styles.menuItemText}>{item.title}</span>
+                  </MenuItem>
+                ))}
               </Select>
             </Grid>
-
             <label className={`${styles.label} ${styles.labelBottom}`}>
               Receive amount
             </label>
@@ -184,48 +232,28 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
                 label="Currency"
                 onChange={handleCryptoChange}
               >
-                <MenuItem className={styles.menuItem} value={Cryptos.BTC}>
-                  <Grid>
-                    <Image
-                      src="/btc.webp"
-                      alt="Bitcoin Logo"
-                      className={styles.icon}
-                      width={20}
-                      height={20}
-                      priority
-                    />
-                    <span className={styles.cryptoShortName}>BTC</span>
-                  </Grid>
-                  <label className={styles.cryptoLabel}>BITCOIN</label>
-                </MenuItem>
-                <MenuItem className={styles.icon} value={Cryptos.LTC}>
-                  <Grid>
-                    <Image
-                      src="/ltc.png"
-                      alt="Litecoin Logo"
-                      className={styles.icon}
-                      width={20}
-                      height={20}
-                      priority
-                    />
-                    <span className={styles.cryptoShortName}>LTC</span>
-                  </Grid>
-                  <label className={styles.cryptoLabel}>LITECOIN</label>
-                </MenuItem>
-                <MenuItem className={styles.icon} value={Cryptos.ETH}>
-                  <Grid>
-                    <Image
-                      src="/eth.png"
-                      alt="Ethereum Logo"
-                      className={styles.icon}
-                      width={20}
-                      height={20}
-                      priority
-                    />
-                    <span className={styles.cryptoShortName}>ETH</span>
-                  </Grid>
-                  <label className={styles.cryptoLabel}>ETHEREUM</label>
-                </MenuItem>
+                {CRYPTOS.map((item) => (
+                  <MenuItem
+                    key={item.title}
+                    className={styles.menuItem}
+                    value={item.value}
+                  >
+                    <Grid>
+                      <Image
+                        src={item.src}
+                        alt={item.alt}
+                        className={styles.icon}
+                        width={20}
+                        height={20}
+                        priority
+                      />
+                      <span className={styles.cryptoShortName}>
+                        {item.title}
+                      </span>
+                    </Grid>
+                    <label className={styles.cryptoLabel}>{item.label}</label>
+                  </MenuItem>
+                ))}
               </Select>
             </Grid>
           </Container>
@@ -248,27 +276,16 @@ export default function BuyAndSell({ exchangeRates }: ExchangeProps) {
               label="Currency"
               onChange={handlePaymentChange}
             >
-              <MenuItem value={'bank'}>
-                <span className={styles.spanMenuItemPayment}>
-                  Easy bank transfer
-                </span>
-              </MenuItem>
-              <MenuItem
-                className={styles.menuItemPaymentMethod}
-                value={'credit'}
-              >
-                <span className={styles.spanMenuItemPayment}>Credit card</span>
-              </MenuItem>
-              <MenuItem
-                className={styles.menuItemPaymentMethod}
-                value={'debit'}
-              >
-                <span className={styles.spanMenuItemPayment}>Debit card</span>
-              </MenuItem>
+              {PAYMENTMETHODS.map((item) => (
+                <MenuItem key={item.value} value={item.value}>
+                  <span className={styles.spanMenuItemPayment}>
+                    {item.title}
+                  </span>
+                </MenuItem>
+              ))}
             </Select>
           </Container>
         </div>
-
         <div
           className={`${styles.containerAligment} ${styles.containerPayConfirmationAligment}`}
         >
